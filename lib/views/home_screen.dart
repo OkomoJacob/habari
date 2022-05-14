@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habari/helpers/data.dart';
+import 'package:habari/helpers/news.dart';
+import 'package:habari/models/article_model.dart';
 import 'package:habari/models/category_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -9,11 +11,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<CategoryModel> categories = <CategoryModel>[];
+  List<ArticleModel> articles = <ArticleModel>[];
+  bool _loading = true;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     categories = getCategories();
+    getNews();
+  }
+
+  getNews() async {
+    News newsClass = News();
+    await newsClass.getNews();
+    articles = newsClass.news;
+
+    setState(() {
+      _loading = false;
+    });
   }
 
   @override
@@ -32,26 +48,45 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         elevation: 0.0,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 70,
-              child: ListView.builder(
-                  shrinkWrap: true, //To remove renderbox not laid out
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return CategoryTile(
-                      imageUrl: categories[index].imageUrl,
-                      categoryName: categories[index].categoryName,
-                    );
-                  }),
+      body: _loading
+          ? Center(
+              child: Container(
+                child: CircularProgressIndicator(),
+              ),
             )
-          ],
-        ),
-      ),
+          : Container(
+              child: Column(
+                children: [
+                  // -------------------- Categories -------------------- //
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    height: 70,
+                    child: ListView.builder(
+                        shrinkWrap: true, //To remove renderbox not laid out
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          return CategoryTile(
+                            imageUrl: categories[index].imageUrl,
+                            categoryName: categories[index].categoryName,
+                          );
+                        }),
+                  ),
+                  // -------------------- Blogs -------------------- //
+                  Container(
+                    child: ListView.builder(
+                        itemCount: articles.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return BlogTile(
+                              imageUrl: articles[index].urlToImage.toString(),
+                              title: articles[index].title.toString(),
+                              descr: articles[index].description.toString());
+                        }),
+                  )
+                ],
+              ),
+            ),
     );
   }
 }
