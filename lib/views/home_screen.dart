@@ -8,7 +8,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   List<CategoryModel> categories = <CategoryModel>[];
   @override
   void initState() {
@@ -22,14 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-          Text("Flutter"),
-          Text(
-            "News",
-            style: TextStyle(color: Colors.redAccent),
-          )
-        ]),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const <Widget>[
+              Text("Flutter"),
+              Text(
+                "News",
+                style: TextStyle(color: Colors.redAccent),
+              )
+            ]),
         centerTitle: true,
         elevation: 0.0,
       ),
@@ -37,17 +36,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               height: 70,
               child: ListView.builder(
-                shrinkWrap: true, //To remove renderbox not laid out
-                scrollDirection: Axis.horizontal,
-                itemCount: categories.length,
-                itemBuilder: (context, index){
-                  return CategoryTile(
-                    imageUrl: categories[index].imageUrl,
-                    CategoryName: categories[index].categoryName,
+                  shrinkWrap: true, //To remove renderbox not laid out
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return CategoryTile(
+                      imageUrl: categories[index].imageUrl,
+                      categoryName: categories[index].categoryName,
                     );
-                }),
+                  }),
             )
           ],
         ),
@@ -57,18 +57,46 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class CategoryTile extends StatelessWidget {
-  
-  final imageUrl, CategoryName;
-  CategoryTile({this.imageUrl, this.CategoryName});
+  final imageUrl, categoryName;
+  CategoryTile({this.imageUrl, this.categoryName});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Image.network(imageUrl, width: 120, height: 60, fit: BoxFit.cover,),
-          Container()
-        ],
-      ) ,
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        margin: EdgeInsets.only(right: 16),
+        child: Stack(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                imageUrl,
+                width: 120,
+                height: 60,
+                fit: BoxFit.cover,
+              ),
+            ),
+            // Text container
+            Container(
+              alignment: Alignment.center,
+              width: 120,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.black26,
+              ),
+              child: Text(
+                categoryName,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
