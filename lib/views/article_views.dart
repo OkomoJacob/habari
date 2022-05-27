@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ArticlesViews extends StatefulWidget {
-  const ArticlesViews({ Key? key }) : super(key: key);
+  const ArticlesViews({Key? key}) : super(key: key);
 
   @override
   State<ArticlesViews> createState() => _ArticlesViewsState();
@@ -10,8 +10,6 @@ class ArticlesViews extends StatefulWidget {
 class _ArticlesViewsState extends State<ArticlesViews> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Container();
   }
 }
