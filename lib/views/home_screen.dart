@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:habari/helpers/data.dart';
 import 'package:habari/helpers/news.dart';
 import 'package:habari/models/article_model.dart';
 import 'package:habari/models/category_model.dart';
+import 'package:habari/views/article_views.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -76,23 +78,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           }),
                     ),
                     // -------------------- Blogs -------------------- //
-                    SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 16),
-                        child: ListView.builder(
-                            itemCount: articles.length,
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return BlogTile(
-                                  imageUrl:
-                                      articles[index].urlToImage.toString(),
-                                  title: articles[index].title.toString(),
-                                  descr:
-                                      articles[index].description.toString());
-                            }),
-                      ),
-                    )
+                    Container(
+                      padding: EdgeInsets.only(top: 16),
+                      child: ListView.builder(
+                          itemCount: articles.length,
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return BlogTile(
+                              imageUrl: articles[index].urlToImage.toString(),
+                              title: articles[index].title.toString(),
+                              descr: articles[index].description.toString(),
+                              url: articles[index].url.toString(),
+                            );
+                          }),
+                    ),
                   ],
                 ),
               ),
@@ -147,32 +147,46 @@ class CategoryTile extends StatelessWidget {
 }
 
 class BlogTile extends StatelessWidget {
-  final String imageUrl, title, descr;
+  final String imageUrl, title, descr, url;
   BlogTile({
     required this.imageUrl,
     required this.title,
     required this.descr,
+    required this.url,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Column(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(imageUrl)),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 17, color: Colors.black87, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 8,),
-          Text(
-            descr,
-            style: const TextStyle(color: Color.fromARGB(255, 122, 122, 122)),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (context) => ArticlesViews(blogUrl: url)));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          children: [
+            ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(imageUrl)),
+            Text(
+              title,
+              style: const TextStyle(
+                  fontSize: 17,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              descr,
+              style: const TextStyle(color: Color.fromARGB(255, 122, 122, 122)),
+            ),
+          ],
+        ),
       ),
     );
   }
