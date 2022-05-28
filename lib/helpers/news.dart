@@ -7,7 +7,7 @@ class News {
   List<ArticleModel> news = [];
 
   Future<void> getNews() async {
-    String url = "https://newsapi.org/v2/everything?q=tesla&from=2022-04-27&sortBy=publishedAt&apiKey=a262f7dccba14a8498b0ca61dbebdb26";
+    String url = main_url;
     var response = await http.get(Uri.parse(url));
     var jsonData = jsonDecode(response.body);
     // Json API request status code == 200?
