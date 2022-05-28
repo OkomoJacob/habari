@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:habari/helpers/data.dart';
 import 'package:habari/helpers/news.dart';
@@ -54,37 +55,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CircularProgressIndicator(),
               ),
             )
-          : Container(
-              child: Column(
-                children: [
-                  // -------------------- Categories -------------------- //
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    height: 70,
-                    child: ListView.builder(
-                        shrinkWrap: true, //To remove renderbox not laid out
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          return CategoryTile(
-                            imageUrl: categories[index].imageUrl,
-                            categoryName: categories[index].categoryName,
-                          );
-                        }),
-                  ),
-                  // -------------------- Blogs -------------------- //
-                  Container(
-                    child: ListView.builder(
-                        itemCount: articles.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return BlogTile(
-                              imageUrl: articles[index].urlToImage.toString(),
-                              title: articles[index].title.toString(),
-                              descr: articles[index].description.toString());
-                        }),
-                  )
-                ],
+          : SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    // -------------------- Categories -------------------- //
+                    Container(
+                      height: 70,
+                      child: ListView.builder(
+                          shrinkWrap: true, //To remove renderbox not laid out
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            return CategoryTile(
+                              imageUrl: categories[index].imageUrl,
+                              categoryName: categories[index].categoryName,
+                            );
+                          }),
+                    ),
+                    // -------------------- Blogs -------------------- //
+                    SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.only(top: 16),
+                        child: ListView.builder(
+                            itemCount: articles.length,
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return BlogTile(
+                                  imageUrl:
+                                      articles[index].urlToImage.toString(),
+                                  title: articles[index].title.toString(),
+                                  descr:
+                                      articles[index].description.toString());
+                            }),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
     );
@@ -104,8 +114,8 @@ class CategoryTile extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
                 width: 120,
                 height: 60,
                 fit: BoxFit.cover,
@@ -147,11 +157,21 @@ class BlogTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         children: [
-          Image.network(imageUrl),
-          Text(title),
-          Text(descr),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.network(imageUrl)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 17, color: Colors.black87, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8,),
+          Text(
+            descr,
+            style: const TextStyle(color: Color.fromARGB(255, 122, 122, 122)),
+          ),
         ],
       ),
     );
