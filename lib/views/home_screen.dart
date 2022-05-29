@@ -6,6 +6,7 @@ import 'package:habari/helpers/news.dart';
 import 'package:habari/models/article_model.dart';
 import 'package:habari/models/category_model.dart';
 import 'package:habari/views/article_views.dart';
+import 'package:habari/views/news_category.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -103,11 +104,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class CategoryTile extends StatelessWidget {
   final imageUrl, categoryName;
-  CategoryTile({this.imageUrl, this.categoryName});
+  CategoryTile({required this.imageUrl, required this.categoryName});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            CupertinoPageRoute(
+                builder: (context) =>
+                    NewsCaregory(category: categoryName.toLowerCase())));
+      },
       child: Container(
         margin: EdgeInsets.only(right: 16),
         child: Stack(
