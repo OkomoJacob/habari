@@ -49,28 +49,37 @@ class _NewsCaregoryState extends State<NewsCaregory> {
         centerTitle: true,
         elevation: 0.0,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            // -------------------- Blogs -------------------- //
-            Container(
-              padding: EdgeInsets.only(top: 16),
-              child: ListView.builder(
-                  itemCount: articles.length,
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return BlogTile(
-                      imageUrl: articles[index].urlToImage.toString(),
-                      title: articles[index].title.toString(),
-                      descr: articles[index].description.toString(),
-                      url: articles[index].url.toString(),
-                    );
-                  }),
+      body: _loading
+          ? Center(
+              child: Container(
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    // -------------------- Blogs -------------------- //
+                    Container(
+                      padding: EdgeInsets.only(top: 16),
+                      child: ListView.builder(
+                          itemCount: articles.length,
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return BlogTile(
+                              imageUrl: articles[index].urlToImage.toString(),
+                              title: articles[index].title.toString(),
+                              descr: articles[index].description.toString(),
+                              url: articles[index].url.toString(),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
