@@ -1,6 +1,23 @@
 # Habari NEWS App
 
-A simple NEWS app to notify me about the msot hot trending news in Kenay Today
+### Introduction
+- A simple NEWS app to notify me about the most hot trending news in Kenya Today.
+
+#### Techs used in this build
+- [X] Flutter
+- [X] Dart
+- [X] HTTP request
+- [X] News App API
+- [X] Flutter webview
+
+### Project Technical Deliverables
+-
+
+To generate the **Android** `.apk` file, in the same working directory still, run this command**
+
+```dart
+flutter build apk --split-per-abi
+```
 
 ## Resources
 1. [Obtain API KEY here](https://newsapi.org/)
